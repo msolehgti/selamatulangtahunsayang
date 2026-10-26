@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kue Ulang Tahun 🎂</title>
+<style>
+  /* ===== BACKGROUND & LAYOUT ===== */
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('bg.jpg') center/cover no-repeat fixed;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+    overflow: hidden;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  /* Judul Panjang (2 Baris) */
+  .title {
+    font-size: 1.1rem; 
+    font-weight: 900;
+    margin-bottom: 5px;
+    color: #d13c7a;
+    text-shadow: 2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, -2px 2px 0px #fff, 0 0 15px rgba(255,255,255,0.9);
+    letter-spacing: 1px;
+    text-align: center;
+    line-height: 1.5;
+    max-width: 90%;
+  }
+  
+  .title span {
+    display: block;
+  }
+
+  /* Tanggal Lahir */
+  .date {
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    font-weight: 800;
+    color: #2c3e50;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 0 #fff;
+  }
+
+  /* ===== AREA KUE ===== */
+  .cake-container {
+    position: relative;
+    width: 260px; 
+    height: 260px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .cake-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 0 10px rgba(0,0,0,0.1);
+    border: 6px solid #fff;
+    background-color: #fff; 
+  }
+
+  /* ===== LILIN ANGKA ===== */
+  .candles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 15px;
+    z-index: 10;
+    rotate: -5deg; 
+  }
+
+  .candle {
+    position: relative;
+    width: 40px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-weight: 900;
+    color: #ff3d7f;
+    text-shadow: 2px 2px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+  }
+
+  .wick {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 12px;
+    background: #2c1e16;
+    border-radius: 2px;
+    z-index: 2;
+  }
+
+  .flame {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 28px;
+    background: radial-gradient(circle at 50% 80%, #fff 0%, #ffe066 35%, #ff9d00 70%, #ff4d00 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 0 20px 8px rgba(255,160,0,.6), 0 0 40px 15px rgba(255,90,0,.3);
+    animation: flicker .15s infinite alternate;
+    transform-origin: bottom center;
+    transition: opacity .4s ease, transform .4s ease;
+    z-index: 3;
+  }
+  
+  .flame::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 12px;
+    background: #7db7ff;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: .9;
+  }
+
+  @keyframes flicker {
+    0%   { transform: translateX(-50%) rotate(-4deg) scale(1, 1); }
+    100% { transform: translateX(-50%) rotate(4deg) scale(1.05, .95); }
+  }
+
+  .flame.out {
+    opacity: 0;
+    transform: translateX(-50%) scale(.1);
+  }
+
+  /* ===== STATUS & TOMBOL ===== */
+  .status {
+    margin-top: 5px;
+    font-size: 14px; /* <--- DIUBAH JADI 14px SESUAI PERMINTAANMU */
+    font-weight: 700;
+    padding: 10px 15px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: .3s;
+    text-align: center;
+    min-height: 22px;
+    color: #d13c7a;
+    border: 2px dashed #ff9a9e;
+    max-width: 90%;
+    line-height: 1.4;
+  }
+  
+  .status.listening { background: rgba(200, 255, 230, 0.95); color: #008a5e; border-color: #008a5e;}
+  .status.done { background: rgba(255, 235, 150, 0.95); color: #b8860b; border-color: #b8860b;}
+
+  .btn {
+    margin-top: 15px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 800;
+    border: 3px solid #fff;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+    color: #d13c7a;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(255, 154, 158, 0.4);
+    transition: .2s;
+  }
+  .btn:active { transform: scale(.95); }
+  .btn:disabled { opacity: 0.7; cursor: default; background: #eee; color: #999; border-color: #ddd; }
+
+  .meter {
+    margin-top: 12px;
+    width: 200px;
+    height: 12px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .meter-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #56ab2f, #a8e063);
+    transition: width .05s;
+  }
+</style>
+</head>
+<body>
+
+  <!-- TEXT JUDUL -->
+  <div class="title">
+    <span>HAPPY BIRTHDAY AURA ANAK KECILLL, WANITAAA TERHEBAT DAN TERCANTIK</span>
+    <span>AKU DAN SEGALA GALANYA DI DUNIA🎂❤️</span>
+  </div>
+  
+  <div class="date">20 - 02 - 2010</div>
+
+  <div class="cake-container">
+    <img src="kue.jpg" alt="Kue Snoopy" class="cake-image">
+    <div class="candles" id="candles"></div>
+  </div>
+
+  <div class="status" id="status">TEKAN TOMBOLNYA BARU TIUP LILIN NYAAA YAAA SAYANG KU><</div>
+  
+  <button class="btn" id="startBtn">TIUP LILINNYA CANTIK<3</button>
+  
+  <div class="meter"><div class="meter-fill" id="meterFill"></div></div>
+
+<script>
+  const AGE = "17"; 
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const BLOW_THRESHOLD = isMobile ? 0.22 : 0.08; 
+  const HOLD_TIME_MS   = isMobile ? 400  : 200;  
+
+  const candlesEl = document.getElementById('candles');
+  const flames = [];
+
+  AGE.split('').forEach(digit => {
+    const c = document.createElement('div');
+    c.className = 'candle';
+    c.textContent = digit;
+
+    const wick = document.createElement('div');
+    wick.className = 'wick';
+
+    const flame = document.createElement('div');
+    flame.className = 'flame';
+
+    c.appendChild(wick);
+    c.appendChild(flame);
+    candlesEl.appendChild(c);
+    flames.push(flame);
+  });
+
+  const startBtn = document.getElementById('startBtn');
+  const statusEl = document.getElementById('status');
+  const meterFill = document.getElementById('meterFill');
+
+  let audioCtx, analyser, dataArray, micStream;
+  let blowStart = 0;
+  let listening = false;
+
+  startBtn.addEventListener('click', async () => {
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true }
+      });
+
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const source = audioCtx.createMediaStreamSource(micStream);
+
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 1024;
+      analyser.smoothingTimeConstant = 0.3;
+      source.connect(analyser);
+
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      listening = true;
+      statusEl.textContent = "Ayo tiup sayang... aku dengerin kok! 💨💖";
+      statusEl.classList.add('listening');
+      startBtn.textContent = "LILINNYA AKTIF 🎤";
+      startBtn.disabled = true;
+
+      detectBlow();
+    } catch (err) {
+      if (err.name === 'NotAllowedError' || err.message.includes('Permission dismissed')) {
+        statusEl.textContent = "⚠️ IZINKAN MIKROFONNYA DULU YAA! Klik ikon gembok 🔒 di atas browser, pilih 'Izinkan/Allow'.";
+      } else {
+        statusEl.textContent = "❌ Gagal akses mikrofon: " + err.message;
+      }
+    }
+  });
+
+  function detectBlow() {
+    if (!listening) return;
+    requestAnimationFrame(detectBlow);
+
+    analyser.getByteFrequencyData(dataArray);
+
+    let lowSum = 0;
+    const lowBins = 20; 
+    for (let i = 0; i < lowBins; i++) lowSum += dataArray[i];
+    const lowAvg = lowSum / lowBins / 255;
+
+    let total = 0;
+    for (let i = 0; i < dataArray.length; i++) total += dataArray[i];
+    const totalAvg = total / dataArray.length / 255;
+
+    const blowScore = Math.max(0, lowAvg * 1.8 - totalAvg * 0.15);
+
+    meterFill.style.width = Math.min(100, blowScore * 400) + "%";
+
+    if (blowScore > BLOW_THRESHOLD) {
+      if (blowStart === 0) blowStart = Date.now();
+      const held = Date.now() - blowStart;
+
+      if (held > HOLD_TIME_MS) {
+        extinguishAll();
+      }
+    } else {
+      blowStart = 0;
+    }
+  }
+
+  function extinguishAll() {
+    let anyLit = false;
+    flames.forEach(f => {
+      if (!f.classList.contains('out')) {
+        f.classList.add('out');
+        anyLit = true;
+      }
+    });
+
+    if (anyLit) {
+      statusEl.innerHTML = "YEAYYYY APINYA SUDAAA PADAM AKU HARAP SEMUA KEINGINAN KAMU DI TAHUN INI BANYAK YANG TERWUJUD<br>DAN DI BERIKAN KEBAHAGIAAN DAN KETENANGAN YAAA CANTIKKK KU💖:3";
+      
+      statusEl.classList.remove('listening');
+      statusEl.classList.add('done');
+      
+      startBtn.textContent = "FYUHHHHH🌬️💨";
+      
+      playChime();
+      listening = false; 
+      if (micStream) {
+        micStream.getTracks().forEach(track => track.stop());
+      }
+    }
+  }
+
+  function playChime() {
+    if (!audioCtx) return;
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((freq, i) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + i * 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + i * 0.15 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + i * 0.15 + 0.4);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + i * 0.15);
+      osc.stop(audioCtx.currentTime + i * 0.15 + 0.45);
+    });
+  }
+</script>
+</body>
+</html>
